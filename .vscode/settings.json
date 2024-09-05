@@ -1,0 +1,9 @@
+{
+    "editor.formatOnSave": false,
+    "eslint.run": "onType",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "never",
+        "source.sortImports": "explicit"
+    },
+}
