@@ -1,24 +1,34 @@
-FROM node:23-alpine
+FROM node:latest
 
 # # Instalar dependências do sistema necessárias para o Prisma (Utilizar apenas na imagem node:x-alpine)
 # RUN apk add --no-cache openssl
 
 WORKDIR /backend
 
-# Instala o CLI do NestJS globalmente (necessário para usar o comando nest)
-RUN npm install @nestjs/cli
-
 # Copia os arquivos de dependências para o contêiner
-COPY package*.json ./
+COPY ./package*.json ./
 
 # Instala as dependências do projeto
+# RUN npm install --quit --no-optional --no-fund --no-audit --no-package-lock --loglevel=error
 RUN npm install
+
+# # Instala o CLI do NestJS globalmente (necessário para usar o comando nest)
+# RUN npm install -g @nestjs/cli
 
 # Copia todo o código do projeto para o contêiner
 COPY . .
 
-# Comando para iniciar a aplicação
-CMD ["npm", "run", "dev"]
+# Gera os arquivos do Prisma
+RUN npx prisma generate
+
+# RUN npm run build
 
 # Expõe as portas do NestJS (3000) e do Prisma Studio (5555)
 EXPOSE 3000
+
+# Comando para iniciar a aplicação
+# CMD ["npm", "run", "prod"]
+CMD ["npm", "run", "dev"]
+
+
+
