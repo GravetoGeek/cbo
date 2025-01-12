@@ -11,7 +11,7 @@ import {DatabaseModule} from './database/database.module'
     imports: [
         ConfigModule.forRoot(),
         GraphQLModule.forRoot<ApolloDriverConfig>({
-            autoSchemaFile: path.resolve(process.cwd(),'prisma/schema.gql'),
+            autoSchemaFile: path.resolve(process.cwd(),'src/database/prisma/schema.gql'),
             driver: ApolloDriver,
             sortSchema: true,
             debug: true,
