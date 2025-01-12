@@ -6,7 +6,6 @@ import * as path from 'path'
 import {AppController} from './app.controller'
 import {AppService} from './app.service'
 import {DatabaseModule} from './database/database.module'
-import {AppointmentsResolver} from './resolvers/appointments-resolvers'
 
 @Module({
     imports: [
@@ -23,6 +22,6 @@ import {AppointmentsResolver} from './resolvers/appointments-resolvers'
         DatabaseModule,
     ],
     controllers: [AppController],
-    providers: [AppService,AppointmentsResolver],
+    providers: [AppService],
 })
 export class AppModule {}
