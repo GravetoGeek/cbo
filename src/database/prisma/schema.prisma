@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Familia {
+    id     String  @id @default(cuid())
+    codigo String
+    titulo String?
+}
+
+model Ocupacao {
+    id     String  @id @default(cuid())
+    codigo String
+    titulo String?
+}
+
+model PerfilOcupacional {
+    id        String  @id @default(cuid())
+    cod_grande_grupo    String
+    cod_subgrupo_principal   String
+    cod_subgrupo    String
+    cod_familia    String
+    cod_ocupacao   String
+    sgl_grande_area    String
+    nome_grande_area   String
+    cod_atividade  String
+    nome_atividade String
+}
+
+model Sinonimo {
+    id     String  @id @default(cuid())
+    codigo String
+    titulo String?
+}
+
+model SubGrupo {
+    id     String  @id @default(cuid())
+    codigo String
+    titulo String?
+}
+
+model SubGrupoPrincipal {
+    id     String  @id @default(cuid())
+    codigo String
+    titulo String?
+}
+
+model GrandeGrupo {
+    id     String  @id @default(cuid())
+    codigo String
+    titulo String?
+}

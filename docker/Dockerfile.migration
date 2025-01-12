@@ -1,0 +1,19 @@
+# Use a imagem oficial do Node.js 23 Alpine como imagem base
+FROM node:23-alpine
+
+# # Instalar dependências do sistema necessárias para o Prisma (Utilizar apenas na imagem node:x-alpine)
+# RUN apk add --no-cache openssl
+
+# Definir o diretório de trabalho dentro do contêiner
+WORKDIR /backend
+
+# Copia os arquivos de dependências para o contêiner
+COPY package*.json ./
+
+# Instalar dependências do Node.js
+RUN npm install
+
+# Copia todo o código do projeto para o contêiner
+COPY . .
+
+RUN npx prisma generate

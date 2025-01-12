@@ -1,0 +1,24 @@
+FROM node:23-alpine
+
+# # Instalar dependências do sistema necessárias para o Prisma (Utilizar apenas na imagem node:x-alpine)
+# RUN apk add --no-cache openssl
+
+WORKDIR /backend
+
+# Instala o CLI do NestJS globalmente (necessário para usar o comando nest)
+RUN npm install @nestjs/cli
+
+# Copia os arquivos de dependências para o contêiner
+COPY package*.json ./
+
+# Instala as dependências do projeto
+RUN npm install
+
+# Copia todo o código do projeto para o contêiner
+COPY . .
+
+# Comando para iniciar a aplicação
+CMD ["npm", "run", "dev"]
+
+# Expõe as portas do NestJS (3000) e do Prisma Studio (5555)
+EXPOSE 3000
