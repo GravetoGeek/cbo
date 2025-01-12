@@ -1,0 +1,18 @@
+FROM node:23-alpine
+
+# # Instalar dependências do sistema necessárias para o Prisma (Utilizar apenas na imagem node:x-alpine)
+# RUN apk add --no-cache openssl
+
+WORKDIR /backend
+
+# Copia os arquivos de dependências para o contêiner
+COPY package*.json ./
+
+RUN npm install
+
+# Copia todo o código do projeto para o contêiner
+COPY . .
+
+EXPOSE 5555
+
+CMD ["npx", "prisma", "studio"]
