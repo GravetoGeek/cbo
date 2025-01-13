@@ -5,6 +5,7 @@ import {GraphQLModule} from '@nestjs/graphql'
 import * as path from 'path'
 import {AppController} from './app.controller'
 import {AppService} from './app.service'
+import {CboModule} from './cbo/cbo.module'
 import {DatabaseModule} from './database/database.module'
 
 @Module({
@@ -20,6 +21,7 @@ import {DatabaseModule} from './database/database.module'
             installSubscriptionHandlers: true,
         }),
         DatabaseModule,
+        CboModule,
     ],
     controllers: [AppController],
     providers: [AppService],
