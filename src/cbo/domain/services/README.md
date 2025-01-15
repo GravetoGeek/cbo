@@ -1,0 +1,1 @@
+ “Domain Services” (regras de negócio complexas, sem depender de nada externo).
