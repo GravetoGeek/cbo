@@ -13,51 +13,120 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+// ----------------------------------------------
+//                   Familia
+// ----------------------------------------------
 model Familia {
-    id     String  @id @default(cuid())
-    codigo String
-    titulo String?
+    id         String    @id @default(cuid())
+    codigo     String    @unique
+    titulo     String
+    subGrupoId String
+    subGrupo   SubGrupo @relation(fields: [subGrupoId], references: [id], onDelete: Cascade)
+
+    ocupacoes         Ocupacao[] // Relação 1-N
+    PerfilOcupacional PerfilOcupacional[]
+
+    @@index([codigo])
 }
 
+// ----------------------------------------------
+//                  Ocupacao
+// ----------------------------------------------
 model Ocupacao {
-    id     String  @id @default(cuid())
-    codigo String
-    titulo String?
+    id        String   @id @default(cuid())
+    codigo    String   @unique
+    titulo    String
+    familiaId String
+    familia   Familia @relation(fields: [familiaId], references: [id], onDelete: Cascade)
+
+    sinonimos         Sinonimo[] // Relação 1-N
+    PerfilOcupacional PerfilOcupacional[]
+
+    @@index([codigo])
 }
 
-model PerfilOcupacional {
-    id        String  @id @default(cuid())
-    cod_grande_grupo    String
-    cod_subgrupo_principal   String
-    cod_subgrupo    String
-    cod_familia    String
-    cod_ocupacao   String
-    sgl_grande_area    String
-    nome_grande_area   String
-    cod_atividade  String
-    nome_atividade String
-}
-
+// ----------------------------------------------
+//                  Sinonimo
+// ----------------------------------------------
 model Sinonimo {
-    id     String  @id @default(cuid())
-    codigo String
-    titulo String?
+    id         String    @id @default(cuid())
+    codigo     String    @unique
+    titulo     String
+    ocupacaoId String
+    ocupacao   Ocupacao @relation(fields: [ocupacaoId], references: [id], onDelete: Cascade)
+
+    @@index([codigo])
 }
 
+// ----------------------------------------------
+//                   SubGrupo
+// ----------------------------------------------
 model SubGrupo {
-    id     String  @id @default(cuid())
-    codigo String
-    titulo String?
+    id                  String             @id @default(cuid())
+    codigo              String             @unique
+    titulo              String
+    subGrupoPrincipalId String
+    subGrupoPrincipal   SubGrupoPrincipal @relation(fields: [subGrupoPrincipalId], references: [id], onDelete: Cascade)
+
+    familias          Familia[] // Relação 1-N
+    PerfilOcupacional PerfilOcupacional[]
+
+    @@index([codigo])
 }
 
+// ----------------------------------------------
+//             SubGrupoPrincipal
+// ----------------------------------------------
 model SubGrupoPrincipal {
-    id     String  @id @default(cuid())
-    codigo String
-    titulo String?
+    id            String       @id @default(cuid())
+    codigo        String       @unique
+    titulo        String
+    grandeGrupoId String
+    grandeGrupo   GrandeGrupo @relation(fields: [grandeGrupoId], references: [id], onDelete: Cascade)
+
+    subGrupos         SubGrupo[] // Relação 1-N
+    PerfilOcupacional PerfilOcupacional[]
+
+    @@index([codigo])
 }
 
+// ----------------------------------------------
+//                GrandeGrupo
+// ----------------------------------------------
 model GrandeGrupo {
-    id     String  @id @default(cuid())
-    codigo String
-    titulo String?
+    id                  String              @id @default(cuid())
+    codigo              String              @unique // Se cada codigo for único por GrandeGrupo
+    titulo              String
+    subgruposPrincipais SubGrupoPrincipal[] // Relação 1-N
+    PerfilOcupacional   PerfilOcupacional[]
+
+    @@index([codigo]) // Index para facilitar queries por código
+}
+
+// ----------------------------------------------
+//            PerfilOcupacional
+// ----------------------------------------------
+model PerfilOcupacional {
+    id            String       @id @default(cuid())
+    // Se "PerfilOcupacional" está ligado a cada nível, podemos criar relacionamentos diretos:
+    grandeGrupoId String
+    grandeGrupo   GrandeGrupo @relation(fields: [grandeGrupoId], references: [id], onDelete: Cascade)
+
+    subGrupoPrincipalId String
+    subGrupoPrincipal   SubGrupoPrincipal @relation(fields: [subGrupoPrincipalId], references: [id], onDelete: Cascade)
+
+    subGrupoId String
+    subGrupo   SubGrupo @relation(fields: [subGrupoId], references: [id], onDelete: Cascade)
+
+    familiaId String
+    familia   Familia @relation(fields: [familiaId], references: [id], onDelete: Cascade)
+
+    ocupacaoId String
+    ocupacao   Ocupacao @relation(fields: [ocupacaoId], references: [id], onDelete: Cascade)
+
+    // Campos extras
+    sgl_grande_area  String
+    nome_grande_area String
+    cod_atividade    String
+    nome_atividade   String
 }
