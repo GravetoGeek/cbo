@@ -7,6 +7,7 @@ import {AppController} from './app.controller'
 import {AppService} from './app.service'
 import {CboModule} from './cbo/cbo.module'
 import {DatabaseModule} from './database/database.module'
+import {PrismaService} from './database/prisma/prisma.service'
 
 @Module({
     imports: [
@@ -24,6 +25,8 @@ import {DatabaseModule} from './database/database.module'
         CboModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService,PrismaService],
 })
-export class AppModule {}
+export class AppModule {
+
+}
