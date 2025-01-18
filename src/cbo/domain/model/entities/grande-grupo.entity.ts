@@ -1,9 +1,13 @@
+import {PerfilOcupacional} from './perfil-ocupacional.entity'
+import {SubGrupoPrincipal} from './sub-grupo-principal.entity'
+
 export class GrandeGrupo {
-    id: string
+    id?: string
     codigo: string
     titulo: string
-    constructor(id: string, codigo: string, titulo: string) {
-        this.id = id
+    subgruposPrincipais?: SubGrupoPrincipal[] // Opcional
+    perfilOcupacional?: PerfilOcupacional[] // Opcional
+    constructor(codigo: string, titulo: string) {
         this.codigo = codigo
         this.titulo = titulo
     }
