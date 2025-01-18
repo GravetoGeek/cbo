@@ -1,9 +1,12 @@
+import {Ocupacao} from './ocupacao.entity'
+
 export class Sinonimo {
-    id: string
+    id?: string
     codigo: string
     titulo: string
-    constructor(id: string, codigo: string, titulo: string) {
-        this.id = id
+    ocupacaoId?: string
+    ocupacao?: Ocupacao
+    constructor(codigo: string, titulo: string) {
         this.codigo = codigo
         this.titulo = titulo
     }
