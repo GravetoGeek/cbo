@@ -18,8 +18,7 @@
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./test/jest-e2e.json",
-        "clean": "sudo rm -rf dist && sudo rm -rf node_modules",
-        "seed": "ts-node --transpile-only prisma/seed/index.ts"
+        "clean": "sudo rm -rf dist && sudo rm -rf node_modules"
     },
     "dependencies": {
         "@apollo/server": "^4.11.3",
@@ -81,6 +80,7 @@
         "testEnvironment": "node"
     },
     "prisma": {
-        "schema": "./src/database/prisma/schema.prisma"
+        "schema": "./src/database/prisma/schema.prisma",
+        "seed": "ts-node --transpile-only src/cbo/infrastructure/driven/persistence/prisma/seed/index.ts"
     }
 }
