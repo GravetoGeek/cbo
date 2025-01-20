@@ -75,9 +75,6 @@ CREATE UNIQUE INDEX "Familia_codigo_key" ON "Familia"("codigo");
 CREATE UNIQUE INDEX "Ocupacao_codigo_key" ON "Ocupacao"("codigo");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Sinonimo_codigo_key" ON "Sinonimo"("codigo");
-
--- CreateIndex
 CREATE UNIQUE INDEX "SubGrupo_codigo_key" ON "SubGrupo"("codigo");
 
 -- CreateIndex
