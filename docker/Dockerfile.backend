@@ -18,10 +18,12 @@ RUN npm install
 # Copia todo o código do projeto para o contêiner
 COPY . .
 
-# Gera os arquivos do Prisma
+# # Gera os arquivos do Prisma
 RUN npx prisma generate
 
 # RUN npm run build
+
+# RUN npx prisma db seed
 
 # Expõe as portas do NestJS (3000) e do Prisma Studio (5555)
 EXPOSE 3000
