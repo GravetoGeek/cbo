@@ -1,9 +1,15 @@
 import {Module} from '@nestjs/common'
-import {PrismaResolver} from './prisma/prisma.resolver'
-import {PrismaService} from './prisma/prisma.service'
+import {PrismaService} from '@src/database/infrastructure/driven/persistence/prisma/prisma.service'
+import {PrismaResolver} from '@src/database/infrastructure/driving/graphql/prisma.resolver'
 
 @Module({
-    providers: [PrismaService, PrismaResolver],
-    exports: [PrismaService],
+    providers: [
+        {
+            provide: 'PRISMA_SERVICE',
+            useClass: PrismaService,
+        },
+        PrismaResolver
+    ],
+    exports: ['PRISMA_SERVICE'],
 })
 export class DatabaseModule {}
