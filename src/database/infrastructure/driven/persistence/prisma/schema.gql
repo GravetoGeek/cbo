@@ -1,0 +1,33 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateFamiliaDto {
+  codigo: String!
+  id: ID!
+  titulo: String!
+}
+
+type FamiliaResponseDto {
+  codigo: String!
+  id: ID!
+  titulo: String!
+}
+
+type Mutation {
+  createFamilia(data: CreateFamiliaDto!): FamiliaResponseDto!
+  deleteFamilia(id: String!): Boolean!
+  updateFamilia(data: UpdateFamiliaDto!, id: String!): FamiliaResponseDto
+}
+
+type Query {
+  getFamiliaById(id: String!): FamiliaResponseDto
+  helloWorld(name: String!): String!
+  listFamilias: [FamiliaResponseDto!]!
+}
+
+input UpdateFamiliaDto {
+  codigo: String!
+  id: ID!
+  titulo: String!
+}
