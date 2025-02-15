@@ -1,0 +1,116 @@
+import {Injectable} from '@nestjs/common'
+import {Familia} from '../../domain/model/entities/familia.entity'
+import {FamiliaRepository} from '../../ports/out/familia-repository.interface'
+import {CreateFamiliaDto} from '../dtos/create-familia.dto'
+import {FamiliaResponseDto} from '../dtos/familia-response.dto'
+import {UpdateFamiliaDto} from '../dtos/update-familia.dto'
+
+/**
+ * Serviço de aplicação para casos de uso (use cases) relacionados a 'Família'.
+ * Aqui acontece a orquestração (chamar repositório, converter DTO ↔ Entidade).
+ */
+@Injectable()
+export class FamiliaApplicationService {
+    constructor(
+    private readonly familiaRepository: FamiliaRepository,
+    ) {}
+
+    /**
+   * Cria uma nova família no banco.
+   * 1) Converte CreateFamiliaDto -> Entidade Familia
+   * 2) Chama repositório
+   * 3) Converte Entidade -> FamiliaResponseDto
+   */
+    async createFamilia(dto: CreateFamiliaDto): Promise<FamiliaResponseDto> {
+    // DTO -> Entidade
+        const familia = new Familia(dto.codigo, dto.titulo)
+
+        // Persistência
+        const created = await this.familiaRepository.createFamilia(familia)
+
+        // Entidade -> DTO de resposta
+        return FamiliaResponseDto.fromEntity(created)
+    }
+
+    /**
+   * Atualiza uma família existente pelo ID, com campos opcionais de UpdateFamiliaDto.
+   * Retorna null caso a família não exista.
+   */
+    async updateFamilia(
+        id: string,
+        dto: UpdateFamiliaDto,
+    ): Promise<FamiliaResponseDto | null> {
+    // Busca entidade existente
+        const existing = await this.familiaRepository.getFamiliaById(id)
+        if (!existing) {
+            return null
+        }
+
+        // Atualiza campos (caso venham no DTO)
+        existing.codigo = dto.codigo ?? existing.codigo
+        existing.titulo = dto.titulo ?? existing.titulo
+
+        // Salva alterações via repositório
+        const updated = await this.familiaRepository.updateFamilia(existing)
+
+        // Entidade -> DTO
+        return FamiliaResponseDto.fromEntity(updated)
+    }
+
+    /**
+   * Exclui uma família pelo ID.
+   * Retorna 'true' se a família existia e foi removida, ou 'false' se não encontrada.
+   */
+    async deleteFamilia(id: string): Promise<boolean> {
+    // Verifica se existe antes
+        const existing = await this.familiaRepository.getFamiliaById(id)
+        if (!existing) {
+            return false
+        }
+
+        // Deleta
+        await this.familiaRepository.deleteFamilia(id)
+        return true
+    }
+
+    /**
+   * Retorna a lista de todas as famílias cadastradas.
+   */
+    async listFamilias(): Promise<FamiliaResponseDto[]> {
+        const familias = await this.familiaRepository.listFamilias()
+        return familias.map(FamiliaResponseDto.fromEntity)
+    }
+
+    /**
+   * Retorna uma família específica pelo ID, ou null se não existir.
+   */
+    async getFamiliaById(id: string): Promise<FamiliaResponseDto | null> {
+        const familia = await this.familiaRepository.getFamiliaById(id)
+        if (!familia) {
+            return null
+        }
+        return FamiliaResponseDto.fromEntity(familia)
+    }
+
+    /**
+   * Encontra famílias filtradas por título (ex.: busca parcial).
+   */
+    async findFamiliaByTitle(title: string): Promise<FamiliaResponseDto[]> {
+        const familias = await this.familiaRepository.findFamiliaByTitle(title)
+        return familias.map(FamiliaResponseDto.fromEntity)
+    }
+
+    /**
+   * Cria várias famílias em lote.
+   */
+    async bulkCreateFamilias(dtos: CreateFamiliaDto[]): Promise<FamiliaResponseDto[]> {
+    // Convertendo cada DTO em entidade de domínio
+        const familias = dtos.map(dto => {return new Familia(dto.codigo, dto.titulo)})
+
+        // Persistindo todas de uma vez (dependendo do ORM, pode não retornar IDs)
+        const created = await this.familiaRepository.bulkCreateFamilias(familias)
+
+        // Convertendo todas para DTO de resposta
+        return created.map(FamiliaResponseDto.fromEntity)
+    }
+}

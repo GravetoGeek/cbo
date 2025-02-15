@@ -1,0 +1,1 @@
+“Application Services” (orquestração de casos de uso, chamando Domain e Ports)
